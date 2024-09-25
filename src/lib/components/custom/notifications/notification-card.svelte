@@ -5,6 +5,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { notifications, type Notification } from '@/stores/userStore';
 	import { toast } from 'svelte-sonner';
+	import { swipe } from 'svelte-gestures';
 
 	let clearIndex = NaN;
 
@@ -62,6 +63,8 @@
 		>
 			{#each $notifications as notification, idx (idx)}
 				<div
+					use:swipe={{ timeframe: 300, minSwipeDistance: 30 }}
+					on:swipe={() => clearNotification(notification, idx)}
 					class={`mb-2 flex w-full ${clearIndex === idx && 'translate-x-[-500px] transition-transform'} items-center justify-between border-b p-2 pb-4 last-of-type:border-none`}
 				>
 					<div class="flex items-start gap-4">

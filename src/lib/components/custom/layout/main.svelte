@@ -12,7 +12,7 @@
 	import NavLink from './nav-link.svelte';
 	import { LogIn } from 'lucide-svelte';
 	import { pages } from '@/constants/pages';
-	import { user } from '@/stores/userStore';
+	import { notifications, user } from '@/stores/userStore';
 	import { Notifications } from '@/components/custom/notifications';
 
 	let open = false;
@@ -60,7 +60,17 @@
 		<header class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
 			<Sheet.Root bind:open>
 				<Sheet.Trigger asChild let:builder>
-					<Button variant="outline" size="icon" class="shrink-0 md:hidden" builders={[builder]}>
+					<Button
+						variant="outline"
+						size="icon"
+						class="relative shrink-0 md:hidden"
+						builders={[builder]}
+					>
+						{#if $notifications.length > 0}
+							<span
+								class="absolute left-[-2.5px] top-[-2.5px] flex h-2 w-2 rounded-full bg-red-500"
+							/>
+						{/if}
 						<Menu class="h-5 w-5" />
 						<span class="sr-only">Toggle navigation menu</span>
 					</Button>
