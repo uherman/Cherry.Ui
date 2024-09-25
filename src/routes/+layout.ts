@@ -1,15 +1,7 @@
+import { type User, user } from '@/stores/userStore';
+
 export const ssr = false;
 export const prerender = false;
-
-export type User = {
-	name: string;
-	authenticationType: string;
-	isAuthenticated: boolean;
-	claims: {
-		type: string;
-		value: string;
-	}[];
-};
 
 export const load = async () => {
 	const response = await fetch('Account/Profile');
@@ -21,8 +13,9 @@ export const load = async () => {
 		};
 	}
 
-	const user: User = await response.json();
+	const authenticatedUser: User = await response.json();
+	user.set(authenticatedUser);
 	return {
-		user
+		user: authenticatedUser
 	};
 };

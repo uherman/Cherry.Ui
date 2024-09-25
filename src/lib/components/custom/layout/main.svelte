@@ -18,6 +18,7 @@
 	import DarkMode from '../dark-mode/dark-mode.svelte';
 	import NavLink from './nav-link.svelte';
 	import { LogIn } from 'lucide-svelte';
+	import { user } from '@/stores/userStore';
 
 	export let isAuthenticated: boolean;
 	let open = false;
@@ -158,13 +159,13 @@
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end">
-						<DropdownMenu.Label>My Account</DropdownMenu.Label>
+						<DropdownMenu.Label>{$user?.name ?? 'My Account'}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>Settings</DropdownMenu.Item>
 						<DropdownMenu.Item>Support</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
-							<a href="/Account/Logout">Logout</a>
+							<a href="/Account/Logout" on:click={() => user.set(null)}>Logout</a>
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
