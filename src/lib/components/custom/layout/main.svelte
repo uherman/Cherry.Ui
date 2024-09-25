@@ -1,19 +1,19 @@
 <script lang="ts">
 	import CircleUser from 'lucide-svelte/icons/circle-user';
-	import Bell from 'lucide-svelte/icons/bell';
 	import Menu from 'lucide-svelte/icons/menu';
 	import Search from 'lucide-svelte/icons/search';
 	import Cherry from 'lucide-svelte/icons/cherry';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import * as Sheet from '$lib/components/ui/sheet/index.js';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Sheet from '$lib/components/ui/sheet';
+	import { Input } from '$lib/components/ui/input';
 	import DarkMode from '../dark-mode/dark-mode.svelte';
 	import NavLink from './nav-link.svelte';
 	import { LogIn } from 'lucide-svelte';
 	import { pages } from '@/constants/pages';
 	import { user } from '@/stores/userStore';
+	import { Notifications } from '@/components/custom/notifications';
 
 	let open = false;
 </script>
@@ -26,10 +26,7 @@
 					<Cherry class="h-6 w-6 text-primary" />
 					<span class="">Cherry</span>
 				</a>
-				<Button variant="outline" size="icon" class="ml-auto h-8 w-8">
-					<Bell class="h-4 w-4" />
-					<span class="sr-only">Toggle notifications</span>
-				</Button>
+				<Notifications />
 			</div>
 			<div class="flex-1">
 				<nav class="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -74,6 +71,7 @@
 							<Cherry class="h-6 w-6 text-primary" />
 							<span class="sr-only">Cherry</span>
 						</a>
+						<Notifications />
 						{#each pages as page}
 							<NavLink href={page.href} variant="sheet" on:click={() => (open = false)}>
 								<svelte:component this={page.icon} class="h-5 w-5" />
