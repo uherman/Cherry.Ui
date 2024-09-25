@@ -1,15 +1,9 @@
 <script lang="ts">
 	import CircleUser from 'lucide-svelte/icons/circle-user';
-	import ChartLine from 'lucide-svelte/icons/chart-line';
-	import Package from 'lucide-svelte/icons/package';
-	import ShoppingCart from 'lucide-svelte/icons/shopping-cart';
 	import Bell from 'lucide-svelte/icons/bell';
 	import Menu from 'lucide-svelte/icons/menu';
 	import Search from 'lucide-svelte/icons/search';
-	import Users from 'lucide-svelte/icons/users';
-	import House from 'lucide-svelte/icons/house';
 	import Cherry from 'lucide-svelte/icons/cherry';
-	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
@@ -18,9 +12,9 @@
 	import DarkMode from '../dark-mode/dark-mode.svelte';
 	import NavLink from './nav-link.svelte';
 	import { LogIn } from 'lucide-svelte';
+	import { pages } from '@/constants/pages';
 	import { user } from '@/stores/userStore';
 
-	export let isAuthenticated: boolean;
 	let open = false;
 </script>
 
@@ -39,30 +33,12 @@
 			</div>
 			<div class="flex-1">
 				<nav class="grid items-start px-2 text-sm font-medium lg:px-4">
-					<NavLink href="/">
-						<House class="h-4 w-4" />
-						Dashboard
-					</NavLink>
-					<NavLink href="/orders">
-						<ShoppingCart class="h-4 w-4" />
-						Orders
-						<Badge class="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-							6
-						</Badge>
-					</NavLink>
-
-					<NavLink href="/products">
-						<Package class="h-4 w-4" />
-						Products
-					</NavLink>
-					<NavLink href="/customers">
-						<Users class="h-4 w-4" />
-						Customers
-					</NavLink>
-					<NavLink href="/analytics">
-						<ChartLine class="h-4 w-4" />
-						Analytics
-					</NavLink>
+					{#each pages as page}
+						<NavLink href={page.href}>
+							<svelte:component this={page.icon} class="h-4 w-4" />
+							{page.title}
+						</NavLink>
+					{/each}
 				</nav>
 			</div>
 			<div class="mt-auto p-4">
@@ -98,29 +74,12 @@
 							<Cherry class="h-6 w-6 text-primary" />
 							<span class="sr-only">Cherry</span>
 						</a>
-						<NavLink href="/" variant="sheet" on:click={() => (open = false)}>
-							<House class="h-5 w-5" />
-							Dashboard
-						</NavLink>
-						<NavLink href="/orders" variant="sheet" on:click={() => (open = false)}>
-							<ShoppingCart class="h-5 w-5" />
-							Orders
-							<Badge class="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-								6
-							</Badge>
-						</NavLink>
-						<NavLink href="/products" variant="sheet" on:click={() => (open = false)}>
-							<Package class="h-5 w-5" />
-							Products
-						</NavLink>
-						<NavLink href="/customers" variant="sheet" on:click={() => (open = false)}>
-							<Users class="h-5 w-5" />
-							Customers
-						</NavLink>
-						<NavLink href="/analytics" variant="sheet" on:click={() => (open = false)}>
-							<ChartLine class="h-5 w-5" />
-							Analytics
-						</NavLink>
+						{#each pages as page}
+							<NavLink href={page.href} variant="sheet" on:click={() => (open = false)}>
+								<svelte:component this={page.icon} class="h-5 w-5" />
+								{page.title}
+							</NavLink>
+						{/each}
 					</nav>
 					<div class="mt-auto">
 						<Card.Root>
@@ -150,7 +109,7 @@
 				</form>
 			</div>
 			<DarkMode />
-			{#if isAuthenticated}
+			{#if $user?.isAuthenticated}
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger asChild let:builder>
 						<Button builders={[builder]} variant="secondary" size="icon" class="rounded-full">
@@ -159,13 +118,13 @@
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end">
-						<DropdownMenu.Label>{$user?.name ?? 'My Account'}</DropdownMenu.Label>
+						<DropdownMenu.Label>{$user.name ?? 'My Account'}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>Settings</DropdownMenu.Item>
 						<DropdownMenu.Item>Support</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
-							<a href="/Account/Logout" on:click={() => user.set(null)}>Logout</a>
+							<a href="/Account/Logout">Logout</a>
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
